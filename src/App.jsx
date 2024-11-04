@@ -1,16 +1,18 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom"; // Switch kullan
+
+import Home from "./components/Home";
 import OrderForm from "./components/OrderForm";
 import OrderSuccess from "./components/OrderSuccess";
 
 function App() {
   return (
     <Router>
-      <Routes>
-        <Route path="/" element={<Home />} /> {/* Anasayfa bileşeni */}
-        <Route path="/order" element={<OrderForm />} />
-        <Route path="/order-success" element={<OrderSuccess />} />
-      </Routes>
+      <Switch>
+        <Route exact path="/" component={Home} /> {/* Anasayfa bileşeni */}
+        <Route path="/order" component={OrderForm} />
+        <Route path="/order-success" component={OrderSuccess} />
+      </Switch>
     </Router>
   );
 }

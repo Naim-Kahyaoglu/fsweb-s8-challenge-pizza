@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useHistory } from 'react-router-dom'; // useHistory'i import et
 
 const OrderForm = () => {
     const [formData, setFormData] = useState({
@@ -10,7 +10,7 @@ const OrderForm = () => {
         özel: ''
     });
     
-    const navigate = useNavigate();
+    const history = useHistory(); // useHistory'i kullan
 
     const handleChange = (event) => {
         const { name, value } = event.target;
@@ -33,7 +33,7 @@ const OrderForm = () => {
         axios.post('https://reqres.in/api/pizza', formData)
             .then(response => {
                 console.log(response.data);
-                navigate('/success'); // Başarıyla gönderildiğinde yönlendir
+                history.push('/order-success'); // Yönlendirme
             })
             .catch(error => {
                 console.error('There was an error!', error);

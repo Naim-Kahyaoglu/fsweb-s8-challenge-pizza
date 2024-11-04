@@ -34,4 +34,16 @@ describe('Pizza Order Form Tests', () => {
         // Başarılı bir şekilde yönlendirilip yönlendirilmediğini kontrol et
         cy.url().should('include', '/success'); // Başarı sayfasının URL'sini kontrol et
     });
+    it('should display success message after form submission', () => {
+        cy.get('input[name="isim"]').type('Ali');
+        cy.get('select[name="boyut"]').select('Orta');
+        cy.get('input[type="checkbox"][value="Pepperoni"]').check();
+        cy.get('input[type="checkbox"][value="Mantar"]').check();
+        cy.get('textarea[name="özel"]').type('Extra sos olsun.');
+        cy.get('button[type="submit"]').click();
+        
+        // Başarı mesajını kontrol et
+        cy.contains('Siparişiniz başarıyla alındı!').should('be.visible');
+    });
+    
 });
