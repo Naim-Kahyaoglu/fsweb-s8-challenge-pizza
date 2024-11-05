@@ -50,8 +50,8 @@ const OrderForm = () => {
             </div>
 
             {/* Form içerikleri */}
-            <div className="flex-grow mx-auto mt-8 w-full max-w-3xl px-6">
-                <form onSubmit={handleSubmit} className="space-y-6">
+            <div className="flex-grow mx-auto mt-8 w-full max-w-3xl px-6 space-y-6">
+                <form onSubmit={handleSubmit}>
                     {/* Boyut ve Hamur Seç */}
                     <div className="flex justify-between mb-6 space-x-4">
                         <div className="flex-1">
