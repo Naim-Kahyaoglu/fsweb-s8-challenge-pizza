@@ -4,6 +4,7 @@ import { useHistory } from 'react-router-dom';
 
 const OrderForm = () => {
     const [formData, setFormData] = useState({ boyut: '', hamur: 'Hamur Kalınlığı', malzemeler: [], özel: '', quantity: 1 });
+    const [textAreaHeight, setTextAreaHeight] = useState(56); // Başlangıçta 56px yükseklik
     const history = useHistory();
 
     const handleChange = (event) => {
@@ -27,18 +28,24 @@ const OrderForm = () => {
             .catch(error => { console.error('There was an error!', error); });
     };
 
+    const handleTextAreaChange = (event) => {
+        setFormData({ ...formData, [event.target.name]: event.target.value });
+
+        // Textarea'nın içeriğine göre yüksekliği ayarlıyoruz
+        setTextAreaHeight(event.target.scrollHeight);
+    };
+
     // Stil düzenlemeleri
     const headerStyle = { backgroundColor: 'red', color: 'white', width: '1920px', height: '207px', padding: '20px', position: 'relative', margin: '0 auto' };
     const headingStyle = { fontSize: '3em', margin: 0, textAlign: 'center', paddingTop: '50px' };
     const subTextStyle = { fontSize: '0.8em', position: 'absolute', bottom: '10px', left: '20px', textTransform: 'lowercase' };
     
-    // "Position Absolute Acı Pizza" içerik stili
     const pizzaDetailsStyle = {
         backgroundColor: '#f8f8f8',
         padding: '20px',
         marginTop: '20px',
         width: '532px',
-        height: 'auto',  // Yükseklik otomatik olacak, içerik kadar uzayacak
+        height: 'auto',
         borderRadius: '10px',
         margin: '0 auto',
     };
@@ -48,17 +55,15 @@ const OrderForm = () => {
     const pizzaPriceStyle = { fontSize: '1.5em', color: '#FF5733', fontWeight: 'bold' };
     const pizzaRatingStyle = { fontSize: '1.1em', color: '#4CAF50' };
     
-    // İçeriğin (paragraf) stili
     const pizzaDescriptionStyle = {
         fontSize: '1em',
         color: '#333',
         marginTop: '20px',
         lineHeight: '1.6',
         fontStyle: 'italic',
-        marginBottom: '10px',  // İçeriğin altına 1 satır boşluk ekliyoruz
+        marginBottom: '10px', 
     };
 
-    // Form Container Style
     const formContainerStyle = { 
         width: '532px', 
         margin: '0 auto', 
@@ -74,37 +79,80 @@ const OrderForm = () => {
     const ekMalzemelerContainerStyle = {
         display: 'flex',
         flexWrap: 'wrap',
-        gap: '15px', // Aralarındaki boşluk
-        maxHeight: '300px', // Yüksekliği sınırlandırıyoruz
-        overflowY: 'auto', // Yüksekliği aştığında kaydırma çubuğu ekler
+        gap: '15px',
+        maxHeight: '300px',
+        overflowY: 'auto',
         marginBottom: '10px'
     };
 
     const malzemeItemStyle = {
-        width: 'calc(33.33% - 10px)', // Her satırda 3 malzeme olacak, margin'i hesaba katıyoruz
-        flexBasis: '30%', // Yüksekliğini ayarlıyoruz
+        width: 'calc(33.33% - 10px)',
+        flexBasis: '30%',
         fontSize: '1em'
     };
 
-    // Sipariş Ver Butonu ve Sayaç Alt Bileşenleri
-    const footerContainerStyle = {
-        position: 'absolute',  // Sayfanın en altına sabitlemek için absolute kullanıyoruz
-        bottom: '0',
-        left: '50%', // Yatayda tam ortalamak için %50 konumlandırıyoruz
-        transform: 'translateX(-50%)', // Sol tarafa kaydırarak tam ortalama sağlıyoruz
-        width: '532px', // Bileşenin genişliğini 532px yapıyoruz
-        padding: '20px',
-        backgroundColor: '#fff',
-        boxShadow: '0 -2px 10px rgba(0, 0, 0, 0.1)',
+    // Sipariş Ver butonunun bileşeni
+    const buttonStyle = {
+        width: '350px',
+        height: '62px',
+        backgroundColor: '#FF5733',
+        color: 'white',
+        fontSize: '1.2em',
+        border: 'none',
+        cursor: 'pointer',
+        marginTop: '10px',
+        display: 'block',
+        marginLeft: 'auto',
+        marginRight: 'auto',
+    };
+
+    // Sayaç ve fiyat kutusunun düzeni için stil
+    const containerStyle = {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        width: '530px',
+        height: '256px',
+        marginTop: '20px',
+        marginLeft: 'auto',
+        marginRight: 'auto',
+    };
+
+    const counterStyle = {
+        width: '170px',
+        height: '57px',
+        backgroundColor: '#f0f0f0',
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
-        zIndex: 10,
+        padding: '0 10px',
+        borderRadius: '5px',
+        boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)',
     };
 
-    const quantityStyle = { display: 'flex', justifyContent: 'space-between', marginBottom: '20px', fontSize: '1.3em' };
-    const quantityButtonStyle = { backgroundColor: '#f0f0f0', border: '1px solid #ccc', padding: '5px 15px', fontSize: '1.3em', cursor: 'pointer' };
-    const buttonStyle = { width: '100%', padding: '10px', fontSize: '1.1em', backgroundColor: '#FF5733', color: 'white', border: 'none', cursor: 'pointer' };
+    const priceBoxStyle = {
+        width: '350px',
+        height: '255px',
+        backgroundColor: '#fff',
+        boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)',
+        padding: '20px',
+        borderRadius: '10px',
+    };
+
+    const priceInfoStyle = {
+        fontSize: '1.5em',
+        fontWeight: 'bold',
+        color: '#FF5733',
+    };
+
+    const quantityButtonStyle = {
+        backgroundColor: '#f0f0f0',
+        border: '1px solid #ccc',
+        padding: '5px 15px',
+        fontSize: '1.5em',
+        cursor: 'pointer',
+    };
 
     return (
         <div style={{ display: 'flex', flexDirection: 'column', width: '100%', minHeight: '100vh', position: 'relative' }}>
@@ -158,7 +206,9 @@ const OrderForm = () => {
                         <div style={{ textAlign: 'left', marginBottom: '10px', fontSize: '1em' }}><span>En Fazla 10 malzeme seçebilirsiniz. 5₺</span></div>
                         <div style={ekMalzemelerContainerStyle}>
                             {['Pepperoni', 'Sosis', 'Kanada Jambonu', 'Tavuk Izgara', 'Soğan', 'Domates', 'Mısır', 'Sucuk', 'Jalepeno', 'Sarımsak', 'Biber', 'Ananas', 'Kabak'].map(malzeme => (
-                                <div key={malzeme} style={malzemeItemStyle}><label><input type="checkbox" name="malzemeler" value={malzeme} onChange={handleChange} /> {malzeme}</label></div>
+                                <div style={malzemeItemStyle} key={malzeme}>
+                                    <label><input type="checkbox" name="malzemeler" value={malzeme} onChange={handleChange} /> {malzeme}</label>
+                                </div>
                             ))}
                         </div>
                     </div>
@@ -166,25 +216,47 @@ const OrderForm = () => {
                     {/* Sipariş Notu */}
                     <div style={{ marginTop: '20px' }}>
                         <label style={{ fontSize: '1.5em' }}>Sipariş Notu</label>
-                        <div><textarea name="özel" value={formData.özel} onChange={handleChange} 
-                            style={{ width: '100%', height: 'auto', minHeight: '100px', padding: '10px', fontSize: '1.1em', resize: 'none', overflow: 'hidden' }} 
-                            placeholder="Siparişine eklemek istediğin bir not var mı?" /></div>
+                        <div>
+                            <textarea 
+                                name="özel" 
+                                value={formData.özel} 
+                                onChange={handleTextAreaChange} 
+                                style={{
+                                    width: '100%', 
+                                    height: `${textAreaHeight}px`, 
+                                    padding: '10px', 
+                                    fontSize: '1.1em', 
+                                    resize: 'none', 
+                                    minHeight: '56px' 
+                                }} 
+                                placeholder="Siparişine eklemek istediğin bir not var mı?" 
+                            />
+                        </div>
                     </div>
-                </form>
-            </div>
 
-            {/* Footer: Sayaç ve Sipariş Ver Butonu */}
-            <div style={footerContainerStyle}>
-                <div style={{ flex: 1 }}>
-                    <div style={quantityStyle}>
-                        <button style={quantityButtonStyle} onClick={() => setFormData(prev => ({ ...prev, quantity: Math.max(1, prev.quantity - 1) }))}>-</button>
-                        <div>{formData.quantity}</div>
-                        <button style={quantityButtonStyle} onClick={() => setFormData(prev => ({ ...prev, quantity: prev.quantity + 1 }))}>+</button>
+                    {/* Sipariş Ver Butonu */}
+                    <div style={containerStyle}>
+                        <div style={counterStyle}>
+                            <button 
+                                onClick={() => handleQuantityChange('decrement')} 
+                                style={quantityButtonStyle}>-</button>
+                            <span style={{ fontSize: '1.5em' }}>{formData.quantity}</span>
+                            <button 
+                                onClick={() => handleQuantityChange('increment')} 
+                                style={quantityButtonStyle}>+</button>
+                        </div>
+
+                        <div style={priceBoxStyle}>
+                            <div style={priceInfoStyle}>Fiyat: 85.50₺</div>
+                            <div style={{ fontSize: '1.2em', marginTop: '20px' }}>
+                                <div>Adet: {formData.quantity}</div>
+                                <div>Toplam: {85.50 * formData.quantity}₺</div>
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <div style={{ flex: 1, marginLeft: '20px' }}>
+
                     <button type="submit" style={buttonStyle}>Sipariş Ver</button>
-                </div>
+                </form>
             </div>
         </div>
     );
