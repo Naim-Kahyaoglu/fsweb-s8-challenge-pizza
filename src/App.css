@@ -1,6 +1,6 @@
 /* Genişlik kullanımını artırıyoruz */
 #root {
-  width: 90%;  /* Sayfa genişliğini %90 yapıyoruz */
+  width: 90%; /* Sayfa genişliğini %90 yapıyoruz */
   height: 100vh; /* Sayfanın yüksekliğini tam yapıyoruz */
   margin: 0 auto; /* Yatayda ortalıyoruz */
   padding: 0; /* Varsayılan padding'i kaldırıyoruz */
@@ -23,9 +23,14 @@ body {
   justify-content: flex-start; /* İçeriği üstten başlatıyoruz */
   text-align: center;
 }
+
 /* Formu genişlik olarak sınırlıyoruz */
 form {
-  max-width: 1600px; /* Form genişliği maksimum 1200px olacak */
   width: 100%;
   margin: 0 auto; /* Yatayda ortalıyoruz */
 }
+
+/* Tailwind ayarları */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
