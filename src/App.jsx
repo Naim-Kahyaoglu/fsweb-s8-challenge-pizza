@@ -1,19 +1,11 @@
-import React from "react";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom"; // Switch kullan
-
-import Home from "./components/Home";
-import OrderForm from "./components/OrderForm";
-import OrderSuccess from "./components/OrderSuccess";
-
+import React from 'react';
+import OrderForm from './components/OrderForm'; // OrderForm'u import ediyoruz
+import './styles.css';  // Tailwind stilleri
 function App() {
   return (
-    <Router>
-      <Switch>
-        <Route exact path="/" component={Home} /> {/* Anasayfa bileşeni */}
-        <Route path="/order" component={OrderForm} />
-        <Route path="/order-success" component={OrderSuccess} />
-      </Switch>
-    </Router>
+    <div className="App">
+      <OrderForm /> {/* OrderForm bileşenini burada render ediyoruz */}
+    </div>
   );
 }
 
