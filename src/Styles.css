@@ -1,8 +1,7 @@
-/* styles.css */
-
+/* General Styles */
 body {
   font-family: Arial, sans-serif;
-  background-color: #f7fafc; /* light gray background */
+  background-color: #f7fafc;
   color: #333;
   margin: 0;
 }
@@ -71,6 +70,7 @@ body {
   color: #555;
 }
 
+/* Form Styles */
 form {
   margin-top: 30px;
   width: 100%;
@@ -103,6 +103,26 @@ textarea {
   resize: none;
 }
 
+/* Boyut ve Hamur Seçim Bileşeni */
+.form-section.size-crust {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.size, .crust {
+  flex: 1;
+}
+
+.select {
+  width: 100%;
+}
+
+select {
+  width: 100%; /* Flexbox ile tam genişlik */
+}
+
+/* Button Styles */
 button {
   padding: 10px 20px;
   background-color: #ff6600;
@@ -115,20 +135,6 @@ button {
 
 button:hover {
   background-color: #e65c00;
-}
-
-.quantity-control {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  max-width: 200px;
-  margin-bottom: 20px;
-}
-
-.quantity-control button {
-  background-color: #f1f1f1;
-  padding: 8px 12px;
-  font-size: 1.25rem;
 }
 
 .submit-btn {
@@ -144,4 +150,109 @@ button:hover {
 
 .submit-btn:hover {
   background-color: #e65c00;
+}/* Ek Malzeme Seçimi */
+.form-section.ingredients {
+  margin-top: 20px;
+}
+
+.ingredient-options-box {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #fafafa;
+}
+
+.ingredient-item {
+  display: flex;
+  align-items: center;
+  width: calc(33.33% - 10px); /* 3 items per row */
+}
+
+.ingredient-item input[type="checkbox"] {
+  margin-right: 8px;
+}
+
+/* Küçük Ekranlar İçin (Mobil) */
+@media (max-width: 768px) {
+  .ingredient-item {
+    width: calc(50% - 10px); /* 2 items per row */
+  }
+}
+
+@media (max-width: 480px) {
+  .ingredient-item {
+    width: 100%; /* 1 item per row */
+  }
+}
+
+/* Button Styles */
+button {
+  padding: 10px 20px;
+  background-color: #ff6600;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  font-size: 1.125rem;
+}
+
+button:hover {
+  background-color: #e65c00;
+}
+
+.submit-btn {
+  width: 100%;
+  padding: 15px;
+  background-color: #ff6600;
+  color: white;
+  font-size: 1.125rem;
+  cursor: pointer;
+  border-radius: 5px;
+  margin-top: 20px;
+}
+
+.submit-btn:hover {
+  background-color: #e65c00;
+}
+/* Sipariş Toplamı Bileşeni */
+.order-summary {
+  background-color: #f7fafc;
+  border-radius: 8px;
+  padding: 15px;
+  margin-top: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.order-total-header {
+  font-size: 1.25rem;
+  font-weight: bold;
+}
+
+.order-detail, .order-total {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.order-detail .detail-left,
+.order-total .total-left {
+  font-size: 1rem;
+  color: #555;
+}
+
+.order-detail .detail-right,
+.order-total .total-right {
+  font-size: 1.125rem;
+  color: #f57c00;
+  font-weight: bold;
+}
+
+.order-detail .detail-right,
+.order-total .total-right {
+  font-size: 1.125rem;
+  color: #388e3c;
+  font-weight: bold;
 }
