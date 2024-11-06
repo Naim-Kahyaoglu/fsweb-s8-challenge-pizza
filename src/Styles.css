@@ -13,26 +13,32 @@ body {
   justify-content: flex-start;
   align-items: center;
 }
-
+/* order-header Bileşeni */
 .order-header {
   background-color: #e60000;
   color: white;
   width: 100%;
   padding: 20px 40px;
-  position: relative;
+  position: relative; /* p'nin absolute pozisyon alabilmesi için relative position */
   text-align: center;
+  box-sizing: border-box;
 }
 
 .order-header h1 {
   font-size: 2rem;
+  margin: 0;
 }
 
+/* 'p' etiketini sol alt köşeye yerleştir */
 .order-header p {
   position: absolute;
-  bottom: 10px;
-  left: 20px;
-  font-size: 0.875rem;
+  bottom: 10px; /* Alt kısımdan 10px mesafe */
+  left: 20px;  /* Sol kısımdan 20px mesafe */
+  font-size: 0.875rem; /* Daha küçük yazı boyutu */
+  margin: 0;
 }
+
+
 
 .pizza-info {
   background-color: white;
