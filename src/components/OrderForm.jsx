@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { useHistory } from 'react-router-dom';  // useHistory doğru bir seçim
+import { useHistory } from 'react-router-dom';
 
 // Boyut ve Hamur Seçimi Bileşeni
+
 const SizeAndCrustSelection = ({ boyut, hamur, onBoyutChange, onHamurChange }) => {
   return (
     <div className="form-section size-crust">
@@ -25,7 +26,8 @@ const SizeAndCrustSelection = ({ boyut, hamur, onBoyutChange, onHamurChange }) =
       <div className="crust">
         <label>Hamur Seç</label>
         <select name="hamur" onChange={(e) => onHamurChange(e.target.value)} value={hamur}>
-          <option value="Hamur Kalınlığı">Hamur Kalınlığı</option>
+          {/* "Hamur Kalınlığı" sadece bir placeholder olarak görünmeli ve seçilemez olmalı */}
+          <option value="Hamur Kalınlığı" disabled>Hamur Kalınlığı</option>
           <option value="İnce">İnce</option>
           <option value="Normal">Normal</option>
           <option value="Kalın">Kalın</option>
@@ -34,6 +36,8 @@ const SizeAndCrustSelection = ({ boyut, hamur, onBoyutChange, onHamurChange }) =
     </div>
   );
 };
+
+
 
 // Ek Malzeme Seçimi Bileşeni
 const IngredientSelection = ({ selectedIngredients, onChange }) => {
@@ -75,25 +79,21 @@ const IngredientSelection = ({ selectedIngredients, onChange }) => {
 // Sipariş Toplamı Bileşeni
 const OrderSummary = ({ boyut, hamur, malzemeler }) => {
   const pizzaBasePrice = 85.50;
-  
-  // Boyut Fiyatları
+
   const sizePrices = {
     Küçük: 0,
     Orta: 20,
     Büyük: 40,
   };
 
-  // Hamur Fiyatları
   const crustPrices = {
     İnce: 0,
     Normal: 10,
     Kalın: 20,
   };
 
-  // Ek Malzeme Fiyatları
   const ingredientPrice = 5;
 
-  // Fiyat Hesaplama
   const sizePrice = sizePrices[boyut] || 0;
   const crustPrice = crustPrices[hamur] || 0;
   const ingredientsTotal = malzemeler.length * ingredientPrice;
@@ -125,11 +125,30 @@ const OrderForm = () => {
   const [hamur, setHamur] = useState('İnce');
   const [malzemeler, setMalzemeler] = useState([]);
   const [özel, setÖzel] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
-  const history = useHistory();  // useHistory doğru şekilde kullanılıyor
+  const history = useHistory();
+
+  const handleSpecialNoteChange = (event) => {
+    const value = event.target.value;
+    setÖzel(value);
+
+    // Hata mesajını dinamik olarak kontrol et
+    if (value.length < 3) {
+      setErrorMessage('Lütfen geçerli bir mesaj giriniz! En az 3 harf uzunluğunda bir kelime girilmelidir!');
+    } else {
+      setErrorMessage('');
+    }
+  };
 
   const handleSubmit = (event) => {
     event.preventDefault();
+
+    if (özel.length < 3) {
+      setErrorMessage('Lütfen geçerli bir mesaj giriniz! En az 3 harf uzunluğunda bir kelime girilmelidir!');
+      return;
+    }
+
     const formData = { boyut, hamur, malzemeler, özel };
 
     // API'ye veri gönderme
@@ -137,8 +156,7 @@ const OrderForm = () => {
       .post('https://reqres.in/api/pizza', formData)
       .then((response) => {
         console.log(response.data);
-        // Yönlendirme doğru bir şekilde yapılacak
-        history.push('/success');  // Bu URL'nin doğru olduğundan emin olun
+        history.push('/success');
       })
       .catch((error) => {
         console.error('Error!', error);
@@ -152,19 +170,7 @@ const OrderForm = () => {
         <p>anasayfa - sipariş oluştur</p>
       </div>
 
-      <div className="pizza-info">
-        <h2>Position Absolute Acı Pizza</h2>
-        <div className="price-rating">
-          <span className="price">85.50₺</span>
-          <span className="rating">4.9 (200)</span>
-        </div>
-        <p className="description">
-          Frontend Dev olarak hala position:absolute kullanıyorsan bu çok acı pizza tam sana göre. Pizza, domates, peynir ve genellikle çeşitli diğer malzemelerle kaplanmış, daha sonra geleneksel olarak odun ateşinde bir fırında yüksek sıcaklıkta pişirilen, genellikle yuvarlak, düzleştirilmiş mayalı buğday bazlı hamurdan oluşan İtalyan kökenli lezzetli bir yemektir. Küçük bir pizzaya bazen pizzetta denir.
-        </p>
-      </div>
-
       <form onSubmit={handleSubmit}>
-        {/* Boyut ve Hamur Seçimi */}
         <SizeAndCrustSelection 
           boyut={boyut} 
           hamur={hamur} 
@@ -172,24 +178,21 @@ const OrderForm = () => {
           onHamurChange={setHamur} 
         />
 
-        {/* Ek Malzemeler */}
         <IngredientSelection selectedIngredients={malzemeler} onChange={setMalzemeler} />
 
-        {/* Sipariş Notu */}
         <div className="form-section special-note">
           <label>Sipariş Notu</label>
           <textarea
             name="özel"
             value={özel}
-            onChange={(e) => setÖzel(e.target.value)}
+            onChange={handleSpecialNoteChange}  // Burada onChange dinleyicisini ekliyoruz
             placeholder="Siparişine eklemek istediğin bir not var mı?"
           />
         </div>
 
-        {/* Sipariş Toplamı */}
-        <OrderSummary boyut={boyut} hamur={hamur} malzemeler={malzemeler} />
+        {errorMessage && <div className="error-message">{errorMessage}</div>} {/* Hata mesajı */}
 
-        {/* Sipariş Ver Butonu */}
+        <OrderSummary boyut={boyut} hamur={hamur} malzemeler={malzemeler} />
         <div className="order-summary">
           <button type="submit" className="submit-btn">
             Sipariş Ver
