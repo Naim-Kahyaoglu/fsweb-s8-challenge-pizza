@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';  // useHistory doğru bir seçim
 
 // Boyut ve Hamur Seçimi Bileşeni
 const SizeAndCrustSelection = ({ boyut, hamur, onBoyutChange, onHamurChange }) => {
@@ -126,7 +126,7 @@ const OrderForm = () => {
   const [malzemeler, setMalzemeler] = useState([]);
   const [özel, setÖzel] = useState('');
 
-  const history = useHistory();
+  const history = useHistory();  // useHistory doğru şekilde kullanılıyor
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -137,7 +137,8 @@ const OrderForm = () => {
       .post('https://reqres.in/api/pizza', formData)
       .then((response) => {
         console.log(response.data);
-        history.push('/order-success');
+        // Yönlendirme doğru bir şekilde yapılacak
+        history.push('/success');  // Bu URL'nin doğru olduğundan emin olun
       })
       .catch((error) => {
         console.error('Error!', error);
@@ -152,16 +153,15 @@ const OrderForm = () => {
       </div>
 
       <div className="pizza-info">
-  <h2>Position Absolute Acı Pizza</h2>
-  <div className="price-rating">
-    <span className="price">85.50₺</span>
-    <span className="rating">4.9 (200)</span>
-  </div>
-  <p className="description">
-    Frontend Dev olarak hala position:absolute kullanıyorsan bu çok acı pizza tam sana göre. Pizza, domates, peynir ve genellikle çeşitli diğer malzemelerle kaplanmış, daha sonra geleneksel olarak odun ateşinde bir fırında yüksek sıcaklıkta pişirilen, genellikle yuvarlak, düzleştirilmiş mayalı buğday bazlı hamurdan oluşan İtalyan kökenli lezzetli bir yemektir. Küçük bir pizzaya bazen pizzetta denir.
-  </p>
-</div>
-
+        <h2>Position Absolute Acı Pizza</h2>
+        <div className="price-rating">
+          <span className="price">85.50₺</span>
+          <span className="rating">4.9 (200)</span>
+        </div>
+        <p className="description">
+          Frontend Dev olarak hala position:absolute kullanıyorsan bu çok acı pizza tam sana göre. Pizza, domates, peynir ve genellikle çeşitli diğer malzemelerle kaplanmış, daha sonra geleneksel olarak odun ateşinde bir fırında yüksek sıcaklıkta pişirilen, genellikle yuvarlak, düzleştirilmiş mayalı buğday bazlı hamurdan oluşan İtalyan kökenli lezzetli bir yemektir. Küçük bir pizzaya bazen pizzetta denir.
+        </p>
+      </div>
 
       <form onSubmit={handleSubmit}>
         {/* Boyut ve Hamur Seçimi */}
