@@ -13,13 +13,14 @@ body {
   justify-content: flex-start;
   align-items: center;
 }
+
 /* order-header Bileşeni */
 .order-header {
   background-color: #e60000;
   color: white;
   width: 100%;
   padding: 20px 40px;
-  position: relative; /* p'nin absolute pozisyon alabilmesi için relative position */
+  position: relative;
   text-align: center;
   box-sizing: border-box;
 }
@@ -32,55 +33,60 @@ body {
 /* 'p' etiketini sol alt köşeye yerleştir */
 .order-header p {
   position: absolute;
-  bottom: 10px; /* Alt kısımdan 10px mesafe */
-  left: 20px;  /* Sol kısımdan 20px mesafe */
-  font-size: 0.875rem; /* Daha küçük yazı boyutu */
+  bottom: 10px;
+  left: 20px;
+  font-size: 0.875rem;
   margin: 0;
 }
 
-
-
+/* Pizza Bilgisi Stili - Form ile Uyumlu Hale Getirildi */
 .pizza-info {
   background-color: white;
-  padding: 30px;
+  padding: 20px;
   border-radius: 8px;
-  margin-top: 30px;
-  max-width: 600px;
+  margin-top: 20px;
+  width: 100%;
+  max-width: 900px;  /* Genişliği sınırlıyoruz */
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin-left: auto;  /* Sayfada ortalamak için */
+  margin-right: auto; /* Sayfada ortalamak için */
 }
 
-.pizza-info h2 {
-  font-size: 1.25rem;
+.pizza-name {
+  font-size: 1.5rem;
   font-weight: bold;
-  margin-bottom: 15px;
+  text-align: left;  /* Metni sola dayamak için */
+  margin-left: 0;    /* Sol margin'i sıfırlıyoruz */
+  margin-bottom: 10px; /* Fiyatla araya mesafe eklemek için */
 }
 
-.price-rating {
+.pizza-footer {
   display: flex;
   justify-content: space-between;
-  font-size: 1.125rem;
+  align-items: center;
+  margin-top: 15px;
 }
 
-.price {
-  color: #f57c00;
+.pizza-price {
+  font-size: 1.25rem;
+  color: #e74c3c;
   font-weight: bold;
 }
 
-.rating {
-  color: #388e3c;
+.pizza-rating {
+  font-size: 1rem;
+  color: #f39c12;
 }
 
-.description {
-  font-size: 1rem;
-  margin-top: 15px;
-  color: #555;
+.pizza-rating .rating-stars {
+  color: #f1c40f;
 }
 
 /* Form Styles */
 form {
   margin-top: 30px;
   width: 100%;
-  max-width: 900px;
+  max-width: 900px; /* Form genişliğini 900px olarak sınırlıyoruz */
   padding: 20px;
   background-color: white;
   border-radius: 8px;
@@ -92,11 +98,14 @@ label {
   font-weight: bold;
 }
 
-input[type="radio"], input[type="checkbox"] {
+input[type="radio"],
+input[type="checkbox"] {
   margin-right: 8px;
 }
 
-select, input[type="radio"], textarea {
+select,
+input[type="radio"],
+textarea {
   width: 100%;
   padding: 10px;
   margin-top: 8px;
@@ -125,7 +134,7 @@ textarea {
 }
 
 select {
-  width: 100%; /* Flexbox ile tam genişlik */
+  width: 100%;
 }
 
 /* Button Styles */
@@ -156,7 +165,9 @@ button:hover {
 
 .submit-btn:hover {
   background-color: #e65c00;
-}/* Ek Malzeme Seçimi */
+}
+
+/* Ek Malzeme Seçimi */
 .form-section.ingredients {
   margin-top: 20px;
 }
@@ -194,35 +205,6 @@ button:hover {
   }
 }
 
-/* Button Styles */
-button {
-  padding: 10px 20px;
-  background-color: #ff6600;
-  color: white;
-  border: none;
-  cursor: pointer;
-  border-radius: 5px;
-  font-size: 1.125rem;
-}
-
-button:hover {
-  background-color: #e65c00;
-}
-
-.submit-btn {
-  width: 100%;
-  padding: 15px;
-  background-color: #ff6600;
-  color: white;
-  font-size: 1.125rem;
-  cursor: pointer;
-  border-radius: 5px;
-  margin-top: 20px;
-}
-
-.submit-btn:hover {
-  background-color: #e65c00;
-}
 /* Sipariş Toplamı Bileşeni */
 .order-summary {
   background-color: #f7fafc;
@@ -237,7 +219,8 @@ button:hover {
   font-weight: bold;
 }
 
-.order-detail, .order-total {
+.order-detail,
+.order-total {
   display: flex;
   justify-content: space-between;
   margin-top: 10px;

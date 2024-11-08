@@ -2,7 +2,19 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useHistory } from 'react-router-dom';
 
-// Boyut ve Hamur Seçimi Bileşeni
+const PizzaInfo = () => {
+  return (
+    <div className="pizza-info">
+      <div className="pizza-name">Position Absolute Acı Pizza</div>
+      <div className="pizza-footer">
+        <div className="pizza-price">85.50₺</div>
+        <div className="pizza-rating">
+          <span className="rating-stars">⭐️⭐️⭐️⭐️⭐️</span> 4.9 (200 yorum)
+        </div>
+      </div>
+    </div>
+  );
+};
 
 const SizeAndCrustSelection = ({ boyut, hamur, onBoyutChange, onHamurChange }) => {
   return (
@@ -25,9 +37,12 @@ const SizeAndCrustSelection = ({ boyut, hamur, onBoyutChange, onHamurChange }) =
 
       <div className="crust">
         <label>Hamur Seç</label>
-        <select name="hamur" onChange={(e) => onHamurChange(e.target.value)} value={hamur}>
-          {/* "Hamur Kalınlığı" sadece bir placeholder olarak görünmeli ve seçilemez olmalı */}
-          <option value="Hamur Kalınlığı" disabled>Hamur Kalınlığı</option>
+        <select
+          name="hamur"
+          onChange={(e) => onHamurChange(e.target.value)}
+          value={hamur}
+        >
+          <option value="">Hamur Kalınlığı</option>
           <option value="İnce">İnce</option>
           <option value="Normal">Normal</option>
           <option value="Kalın">Kalın</option>
@@ -37,9 +52,6 @@ const SizeAndCrustSelection = ({ boyut, hamur, onBoyutChange, onHamurChange }) =
   );
 };
 
-
-
-// Ek Malzeme Seçimi Bileşeni
 const IngredientSelection = ({ selectedIngredients, onChange }) => {
   const ingredients = [
     'Pepperoni', 'Sosis', 'Kanada Jambonu', 'Tavuk Izgara', 'Soğan',
@@ -76,29 +88,34 @@ const IngredientSelection = ({ selectedIngredients, onChange }) => {
   );
 };
 
-// Sipariş Toplamı Bileşeni
-const OrderSummary = ({ boyut, hamur, malzemeler }) => {
+
+// Hızlı Teslimat Seçimi Bileşeni
+const FastDeliveryOption = ({ hizliTeslimat, onChange }) => {
+  return (
+    <div className="form-section fast-delivery">
+      <label>
+        <input
+          type="checkbox"
+          checked={hizliTeslimat}
+          onChange={(e) => onChange(e.target.checked)}
+        />
+        50₺ karşılığında hızlı teslimat istiyorum
+      </label>
+    </div>
+  );
+};
+
+const OrderSummary = ({ boyut, hamur, malzemeler, hizliTeslimat }) => {
   const pizzaBasePrice = 85.50;
-
-  const sizePrices = {
-    Küçük: 0,
-    Orta: 20,
-    Büyük: 40,
-  };
-
-  const crustPrices = {
-    İnce: 0,
-    Normal: 10,
-    Kalın: 20,
-  };
-
+  const sizePrices = { Küçük: 0, Orta: 20, Büyük: 40 };
+  const crustPrices = { İnce: 0, Normal: 10, Kalın: 20 };
   const ingredientPrice = 5;
+  const fastDeliveryPrice = hizliTeslimat ? 50 : 0;
 
   const sizePrice = sizePrices[boyut] || 0;
   const crustPrice = crustPrices[hamur] || 0;
   const ingredientsTotal = malzemeler.length * ingredientPrice;
-
-  const totalPrice = pizzaBasePrice + sizePrice + crustPrice + ingredientsTotal;
+  const totalPrice = pizzaBasePrice + sizePrice + crustPrice + ingredientsTotal + fastDeliveryPrice;
 
   return (
     <div className="order-summary">
@@ -107,10 +124,14 @@ const OrderSummary = ({ boyut, hamur, malzemeler }) => {
       </div>
       <div className="order-detail">
         <div className="detail-left">Seçimler</div>
-        <div className="detail-right">
-          {malzemeler.length} x {ingredientPrice}₺
-        </div>
+        <div className="detail-right">{malzemeler.length} x {ingredientPrice}₺</div>
       </div>
+      {hizliTeslimat && (
+        <div className="order-detail">
+          <div className="detail-left">Hızlı Teslimat</div>
+          <div className="detail-right">+50₺</div>
+        </div>
+      )}
       <div className="order-total">
         <div className="total-left">Toplam</div>
         <div className="total-right">{totalPrice.toFixed(2)}₺</div>
@@ -118,40 +139,33 @@ const OrderSummary = ({ boyut, hamur, malzemeler }) => {
     </div>
   );
 };
+//OrderForm Bileşeni
 
-// OrderForm Bileşeni
 const OrderForm = () => {
-  const [boyut, setBoyut] = useState('Küçük');
-  const [hamur, setHamur] = useState('İnce');
+  const [boyut, setBoyut] = useState('');  // Başlangıçta boş
+  const [hamur, setHamur] = useState('');  // Başlangıçta boş
   const [malzemeler, setMalzemeler] = useState([]);
   const [özel, setÖzel] = useState('');
+  const [hizliTeslimat, setHizliTeslimat] = useState(false);  // Hızlı teslimat seçeneği
   const [errorMessage, setErrorMessage] = useState('');
-
+  const [formError, setFormError] = useState('');
   const history = useHistory();
-
-  const handleSpecialNoteChange = (event) => {
-    const value = event.target.value;
-    setÖzel(value);
-
-    // Hata mesajını dinamik olarak kontrol et
-    if (value.length < 3) {
-      setErrorMessage('Lütfen geçerli bir mesaj giriniz! En az 3 harf uzunluğunda bir kelime girilmelidir!');
-    } else {
-      setErrorMessage('');
-    }
-  };
 
   const handleSubmit = (event) => {
     event.preventDefault();
+
+    if (hamur === '') {
+      setFormError('Lütfen bir hamur kalınlığı seçiniz.');
+      return;
+    }
 
     if (özel.length < 3) {
       setErrorMessage('Lütfen geçerli bir mesaj giriniz! En az 3 harf uzunluğunda bir kelime girilmelidir!');
       return;
     }
 
-    const formData = { boyut, hamur, malzemeler, özel };
+    const formData = { boyut, hamur, malzemeler, özel, hizliTeslimat };
 
-    // API'ye veri gönderme
     axios
       .post('https://reqres.in/api/pizza', formData)
       .then((response) => {
@@ -171,36 +185,49 @@ const OrderForm = () => {
       </div>
 
       <form onSubmit={handleSubmit}>
-        <SizeAndCrustSelection 
-          boyut={boyut} 
-          hamur={hamur} 
-          onBoyutChange={setBoyut} 
-          onHamurChange={setHamur} 
+        <PizzaInfo />
+
+        {/* Boyut Seçim */}
+        <SizeAndCrustSelection
+          boyut={boyut}
+          hamur={hamur}
+          onBoyutChange={setBoyut}
+          onHamurChange={setHamur}
         />
 
+        {/* Ek Malzeme Seçimi */}
         <IngredientSelection selectedIngredients={malzemeler} onChange={setMalzemeler} />
 
+        {/* Sipariş Notu */}
         <div className="form-section special-note">
           <label>Sipariş Notu</label>
           <textarea
             name="özel"
             value={özel}
-            onChange={handleSpecialNoteChange}  // Burada onChange dinleyicisini ekliyoruz
+            onChange={(e) => setÖzel(e.target.value)}
             placeholder="Siparişine eklemek istediğin bir not var mı?"
           />
         </div>
 
-        {errorMessage && <div className="error-message">{errorMessage}</div>} {/* Hata mesajı */}
+        {formError && <div className="error-message">{formError}</div>}
+        {errorMessage && <div className="error-message">{errorMessage}</div>}
 
-        <OrderSummary boyut={boyut} hamur={hamur} malzemeler={malzemeler} />
-        <div className="order-summary">
-          <button type="submit" className="submit-btn">
-            Sipariş Ver
-          </button>
-        </div>
+        {/* Hızlı Teslimat Seçimi - Sipariş Notu ile Sipariş Toplamı Arasında */}
+        <FastDeliveryOption hizliTeslimat={hizliTeslimat} onChange={setHizliTeslimat} />
+
+        {/* Sipariş Toplamı */}
+        <OrderSummary
+          boyut={boyut}
+          hamur={hamur}
+          malzemeler={malzemeler}
+          hizliTeslimat={hizliTeslimat}
+        />
+
+        <button type="submit" className="submit-btn">Sipariş Ver</button>
       </form>
     </div>
   );
 };
+
 
 export default OrderForm;
